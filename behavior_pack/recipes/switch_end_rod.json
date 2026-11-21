@@ -15,11 +15,9 @@
         "item": "minecraft:redstone"
       }
     ],
-    "unlock": [
-      {
-        "item": "minecraft:end_rod"
-      }
-    ],
+    "unlock": {
+      "context": "AlwaysUnlocked"
+    },
     "result": {
       "item": "secrets_expert:switch_end_rod",
       "count": 1

@@ -15,11 +15,9 @@
         "item": "minecraft:redstone"
       }
     ],
-    "unlock": [
-      {
-        "item": "minecraft:glow_lichen"
-      }
-    ],
+    "unlock": {
+      "context": "AlwaysUnlocked"
+    },
     "result": {
       "item": "secrets_expert:switch_glow_lichen",
       "count": 1

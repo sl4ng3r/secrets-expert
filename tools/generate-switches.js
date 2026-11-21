@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { NAMESPACE, SWITCHES } from '../behavior_pack/scripts/switch-catalog.js';
-import { ACTIVITY_STATE, FACE_STATE, FACES, PULSE_TICKS, WALL_BLOCKS } from '../behavior_pack/scripts/switch-logic.js';
+import { ACTIVITY_STATE, FACE_STATE, FACES, PULSE_TICKS } from '../behavior_pack/scripts/switch-logic.js';
 
 const output = (file) => fileURLToPath(new URL(`../${file}`, import.meta.url));
 const check = process.argv.includes('--check');
@@ -188,7 +188,7 @@ function definition(variant) {
     'minecraft:display_name': nameKey,
     'minecraft:geometry': geometryComponent,
     'minecraft:material_instances': materials,
-    'minecraft:placement_filter': { conditions: [{ allowed_faces: wallFaces, block_filter: WALL_BLOCKS }] },
+    'minecraft:placement_filter': { conditions: [{ allowed_faces: wallFaces }] },
     'minecraft:collision_box': slab ? selection.slab : false,
     'minecraft:selection_box': pane ? paneParts.center : selection[model],
     'minecraft:destructible_by_mining': { seconds_to_destroy: slab ? 1 : 0.1 },
@@ -218,7 +218,7 @@ for (const variant of SWITCHES) {
       description: { identifier: variant.id },
       tags: ['crafting_table'],
       ingredients: [{ item: variant.ingredient }, { item: 'minecraft:redstone' }],
-      unlock: [{ item: variant.ingredient }],
+      unlock: { context: 'AlwaysUnlocked' },
       result: { item: variant.id, count: 1 },
     },
   });

@@ -15,11 +15,9 @@
         "item": "minecraft:redstone"
       }
     ],
-    "unlock": [
-      {
-        "item": "minecraft:oak_slab"
-      }
-    ],
+    "unlock": {
+      "context": "AlwaysUnlocked"
+    },
     "result": {
       "item": "secrets_expert:switch_oak_slab",
       "count": 1

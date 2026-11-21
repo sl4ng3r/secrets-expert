@@ -6,7 +6,8 @@ Minecraft-Bedrock-Add-on für Realms ab 26.40. Stabile Script APIs `@minecraft/s
 
 - `behavior_pack/` enthält Item, Rezept und Skript. `minecraft:wearable` steuert die Ortung. `scripts/main.js` liest den Kopfslot, `scripts/stealth-helmet.js` gleicht die Namensschilddistanz ab.
 - `behavior_pack/scripts/switch-catalog.js` ist die gemeinsame Quelle für Geheimschalter und Handbuch. Bei jedem neuen Schalter Katalog, Rezept, deutsche und englische Namen sowie den im Spiel sichtbaren Handbuchinhalt gemeinsam aktualisieren und testen. Rezepte, Blöcke und Schalterübersetzungen mit `node tools/generate-switches.js` nachführen.
-- `switch-logic.js` definiert die zugelassenen vollen Trägerblöcke und die vier Wandrichtungen. Bedrock speichert Platzierungsrichtung und Impulszustand im Schalterblock. Ein Block-Tick schaltet den Impuls ab.
+- `switch-logic.js` definiert die vier Wandrichtungen. Bedrock prüft die erlaubte Befestigung seitlich am Träger und speichert Platzierungsrichtung und Impulszustand im Schalterblock. Ein Block-Tick schaltet den Impuls ab.
+- Alle Add-on-Rezepte verwenden `AlwaysUnlocked`. `stealth-hud.js` und `resource_pack/ui/hud_screen.json` zeigen dem Träger das Helm-Icon rechts im HUD. Die Anzeige nutzt gezielte Actionbar-Signale.
 - `resource_pack/` enthält das Inventar-Icon, das getragene Modell und die Anzeigenamen für `de_DE` und `en_US`. Beide Packs verwenden dasselbe `pack_icon.png` (256 × 256).
 - Bedrock speichert die ursprüngliche Namensschilddistanz als dynamische Eigenschaft beim Spieler in der Welt. Das Add-on benötigt keinen eigenen Dienst und keine Datenbank. Die Welt und das Deployment verwaltet Minecraft Realms.
 

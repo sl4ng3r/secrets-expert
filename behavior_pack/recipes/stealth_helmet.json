@@ -7,7 +7,7 @@
       { "item": "minecraft:leather_helmet" },
       { "item": "minecraft:ink_sac" }
     ],
-    "unlock": [{ "item": "minecraft:ink_sac" }],
+    "unlock": { "context": "AlwaysUnlocked" },
     "result": { "item": "secrets_expert:stealth_helmet", "count": 1 }
   }
 }

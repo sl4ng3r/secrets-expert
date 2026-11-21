@@ -15,11 +15,9 @@
         "item": "minecraft:redstone"
       }
     ],
-    "unlock": [
-      {
-        "item": "minecraft:glass_pane"
-      }
-    ],
+    "unlock": {
+      "context": "AlwaysUnlocked"
+    },
     "result": {
       "item": "secrets_expert:switch_glass_pane",
       "count": 1

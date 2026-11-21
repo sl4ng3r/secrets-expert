@@ -68,8 +68,14 @@ class PackagingTests(unittest.TestCase):
         self.assertCountEqual(recipe["ingredients"], [
             {"item": "minecraft:leather_helmet"}, {"item": "minecraft:ink_sac"},
         ])
-        self.assertEqual(recipe["unlock"], [{"item": "minecraft:ink_sac"}])
         self.assertEqual(recipe["result"], {"item": HELMET, "count": 1})
+
+    def test_all_addon_recipes_are_available_from_the_start(self):
+        recipes = sorted((BP / "recipes").glob("*.json"))
+        self.assertEqual(len(recipes), 11)
+        for path in recipes:
+            recipe = data(path)["minecraft:recipe_shapeless"]
+            self.assertEqual(recipe["unlock"], {"context": "AlwaysUnlocked"}, path.name)
 
     def test_localized_display_name_and_inventory_icon_are_registered(self):
         components = data(BP / "items/stealth_helmet.json")["minecraft:item"]["components"]

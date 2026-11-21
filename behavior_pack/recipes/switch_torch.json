@@ -15,11 +15,9 @@
         "item": "minecraft:redstone"
       }
     ],
-    "unlock": [
-      {
-        "item": "minecraft:torch"
-      }
-    ],
+    "unlock": {
+      "context": "AlwaysUnlocked"
+    },
     "result": {
       "item": "secrets_expert:switch_torch",
       "count": 1

@@ -33,7 +33,7 @@ function wallSwitch(face = 'north', support = 'minecraft:stone') {
     writes: 0,
     offset(offset) {
       assert.deepEqual(offset, directions[face].offset);
-      return { typeId: support };
+      return { isAir: support === 'minecraft:air', isLiquid: support === 'minecraft:water' };
     },
     setPermutation(next) { this.permutation = next; this.writes++; },
   };
@@ -68,6 +68,9 @@ test('each block has four powered orientations, a native reset tick, and an inac
     assert.equal(block.components['minecraft:display_name'], nameKey);
     assert.equal(block.components['minecraft:redstone_producer'].power, 0);
     assert.equal(block.components['minecraft:tick'], undefined);
+    assert.deepEqual(block.components['minecraft:placement_filter'].conditions, [
+      { allowed_faces: ['north', 'east', 'south', 'west'] },
+    ]);
     const powered = block.permutations.filter(({ components }) => components['minecraft:redstone_producer']);
     assert.equal(powered.length, 4);
     for (const [face, { side }] of Object.entries(directions)) {
@@ -109,14 +112,14 @@ test('tools, vanilla blocks and unsupported placements cause no pulse', () => {
   for (const block of [noSupport, floor, vanilla, switchWithItem]) assert.equal(block.writes, 0);
 });
 
-test('placing a switch validates the clicked wall and initializes it unpowered', () => {
-  const valid = { block: wallSwitch('east'), face: 'East', permutationToPlace: permutation({ [ACTIVITY_STATE]: true }) };
+test('placing on a vanilla-approved wall starts unpowered without a separate list of block types', () => {
+  const valid = { block: wallSwitch('east', 'minecraft:oak_log'), face: 'East', permutationToPlace: permutation({ [ACTIVITY_STATE]: true }) };
   preparePlacement(valid);
   assert.notEqual(valid.cancel, true);
   assert.equal(valid.permutationToPlace.getState(ACTIVITY_STATE), false);
   assert.equal(valid.permutationToPlace.getState(FACE_STATE), 'east');
   for (const event of [
-    { ...valid, face: 'Up' }, { ...valid, block: wallSwitch('east', 'minecraft:chest') },
+    { ...valid, face: 'Up' }, { ...valid, block: wallSwitch('east', 'minecraft:air') },
   ]) {
     preparePlacement(event);
     assert.equal(event.cancel, true);
