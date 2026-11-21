@@ -46,10 +46,17 @@ function box(origin, size, uv) {
   return { origin, size, ...(uv === undefined ? {} : { uv }) };
 }
 
-const torchCross = [
-  box([-8, 2, -7.5], [16, 13, 0], faceMap(['north', 'south'], [0, 0], [16, 16])),
-  box([0, 2, -15.5], [0, 13, 16], faceMap(['east', 'west'], [0, 0], [16, 16])),
-];
+// The three vanilla torch textures share the same two-pixel-wide shaft.
+// The rest of the sprite is transparent and should not cover the cube faces.
+const torchShaft = {
+  ...box([-1, 3, -6], [2, 10, 2], {
+    ...faceMap(['north', 'south', 'east', 'west'], [7, 6], [2, 10]),
+    up: faceUv([7, 6], [2, 2]),
+    down: faceUv([7, 14], [2, 2]),
+  }),
+  pivot: [0, 8, -5],
+  rotation: [22.5, 0, 0],
+};
 
 // Model the end rod horizontally inside the block. Bedrock rejects the old
 // vertical bone after rotating its bounds at the wall.
@@ -66,7 +73,7 @@ const rodShaft = box([-1, 7, -7], [2, 2, 15], {
   west: { ...faceUv([0, 0], [2, 15]), uv_rotation: 270 },
 });
 const selection = {
-  torch: box([-4, 0, -8], [8, 13, 11]),
+  torch: box([-2, 2, -8], [4, 12, 6]),
   skull: box([-4, 4, -8], [8, 8, 8]),
   rod: box([-2, 6, -8], [4, 4, 16]),
   coral: box([-6, 3, -8], [12, 10, 10]),
@@ -95,7 +102,7 @@ function paneBone(name, shape) {
 }
 
 const meshes = {
-  torch: [{ name: 'main', pivot: [0, 2, -7.5], rotation: [22.5, 0, 0], cubes: torchCross }],
+  torch: [{ name: 'main', pivot: [0, 0, 0], cubes: [torchShaft] }],
   skull: [{ name: 'main', pivot: [0, 0, 0], cubes: [box([-4, 4, -8], [8, 8, 8], [0, 0])] }],
   rod: [{ name: 'main', pivot: [0, 0, 0], cubes: [rodBase, rodShaft] }],
   coral: [{ name: 'main', pivot: [0, 6, -8], rotation: [-35, 0, 0], cubes: [
@@ -146,7 +153,7 @@ function definition(variant) {
   const pane = model === 'pane';
   const material = {
     texture: `${NAMESPACE}_${original}`,
-    render_method: slab || model === 'skull' || model === 'rod' ? 'opaque' : 'alpha_test',
+    render_method: slab || model === 'skull' || model === 'rod' || model === 'torch' ? 'opaque' : 'alpha_test',
   };
   const materials = { '*': material };
   const geometryComponent = { identifier: geometryId(model) };

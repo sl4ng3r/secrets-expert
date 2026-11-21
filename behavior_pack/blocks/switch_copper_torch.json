@@ -28,7 +28,7 @@
       "minecraft:material_instances": {
         "*": {
           "texture": "secrets_expert_copper_torch",
-          "render_method": "alpha_test"
+          "render_method": "opaque"
         }
       },
       "minecraft:placement_filter": {
@@ -46,14 +46,14 @@
       "minecraft:collision_box": false,
       "minecraft:selection_box": {
         "origin": [
-          -4,
-          0,
+          -2,
+          2,
           -8
         ],
         "size": [
-          8,
-          13,
-          11
+          4,
+          12,
+          6
         ]
       },
       "minecraft:destructible_by_mining": {

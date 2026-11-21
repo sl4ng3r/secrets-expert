@@ -41,8 +41,8 @@ test('a helmet in the inventory has no effect', () => {
 
 test('equipping saves the original distance before hiding, without repeated writes', () => {
   const player = playerWithDistance(37.5);
-  assert.equal(reconcileHelmet(player, STEALTH_HELMET), true);
-  assert.equal(reconcileHelmet(player, STEALTH_HELMET), true);
+  reconcileHelmet(player, STEALTH_HELMET);
+  reconcileHelmet(player, STEALTH_HELMET);
   assert.deepEqual(player.writes, [['property', 37.5], ['distance', 0]]);
 });
 
@@ -50,7 +50,7 @@ for (const replacement of [undefined, 'minecraft:leather_helmet']) {
   test(`restores the original distance with head slot ${replacement ?? 'empty'}`, () => {
     const player = playerWithDistance(37.5);
     reconcileHelmet(player, STEALTH_HELMET);
-    assert.equal(reconcileHelmet(player, replacement), false);
+    reconcileHelmet(player, replacement);
     reconcileHelmet(player, replacement);
     assert.deepEqual(player.writes, [
       ['property', 37.5], ['distance', 0], ['distance', 37.5], ['property', undefined],

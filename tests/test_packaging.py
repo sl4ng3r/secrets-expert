@@ -77,6 +77,11 @@ class PackagingTests(unittest.TestCase):
             recipe = data(path)["minecraft:recipe_shapeless"]
             self.assertEqual(recipe["unlock"], {"context": "AlwaysUnlocked"}, path.name)
 
+    def test_helmet_script_does_not_send_actionbar_text(self):
+        entry = (BP / "scripts/main.js").read_text(encoding="utf-8")
+        self.assertNotIn("setActionBar(", entry)
+        self.assertNotIn("stealth-hud.js", entry)
+
     def test_localized_display_name_and_inventory_icon_are_registered(self):
         components = data(BP / "items/stealth_helmet.json")["minecraft:item"]["components"]
         key = components["minecraft:display_name"]["value"]
@@ -126,6 +131,26 @@ class PackagingTests(unittest.TestCase):
                     self.assertLessEqual(origin + size, upper)
                 depth.append((cube["origin"][2], cube["origin"][2] + cube["size"][2]))
         self.assertEqual(sorted(depth), [(-8, -7), (-7, 8)])
+
+    def test_torches_use_a_visible_solid_shaft_and_original_texture(self):
+        geometries = data(RP / "models/blocks/secret_switches.geo.json")["minecraft:geometry"]
+        texture_data = data(RP / "textures/terrain_texture.json")["texture_data"]
+        for variant, original, light in [
+            ("torch", "torch_on", 14), ("soul_torch", "soul_torch", 10), ("copper_torch", "copper_torch", 14),
+        ]:
+            with self.subTest(variant=variant):
+                block = data(BP / f"blocks/switch_{variant}.json")["minecraft:block"]
+                components = block["components"]
+                material = components["minecraft:material_instances"]["*"]
+                self.assertEqual(material["render_method"], "opaque")
+                self.assertEqual(texture_data[material["texture"]]["textures"], f"textures/blocks/{original}")
+                self.assertEqual(components["minecraft:light_emission"], light)
+                model = components["minecraft:geometry"]["identifier"]
+                geometry = next(geometry for geometry in geometries if geometry["description"]["identifier"] == model)
+                shaft, = geometry["bones"][0]["cubes"]
+                self.assertEqual(shaft["size"], [2, 10, 2])
+                for face in ("north", "east", "south", "west"):
+                    self.assertEqual(shaft["uv"][face], {"uv": [7, 6], "uv_size": [2, 10]})
 
     def test_wearable_geometry_and_texture_are_linked(self):
         attachable = data(RP / "attachables/stealth_helmet.json")["minecraft:attachable"]["description"]

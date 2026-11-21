@@ -9,12 +9,11 @@ export function reconcileHelmet(player, headItemType) {
     // Save first so that a reload or failed write cannot lose the original value.
     if (savedDistance === undefined) player.setDynamicProperty(SAVED_DISTANCE, currentDistance);
     if (currentDistance !== 0) player.nameplateRenderDistance = 0;
-    return player.nameplateRenderDistance === 0;
+    return;
   }
 
   if (typeof savedDistance === 'number') {
     if (player.nameplateRenderDistance !== savedDistance) player.nameplateRenderDistance = savedDistance;
     player.setDynamicProperty(SAVED_DISTANCE, undefined);
   }
-  return false;
 }
