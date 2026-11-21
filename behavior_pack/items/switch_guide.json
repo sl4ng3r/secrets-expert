@@ -1,0 +1,12 @@
+{
+  "format_version": "1.26.40",
+  "minecraft:item": {
+    "description": { "identifier": "secrets_expert:switch_guide", "menu_category": { "category": "items" } },
+    "components": {
+      "minecraft:display_name": { "value": "item.secrets_expert:switch_guide.name" },
+      "minecraft:icon": { "textures": { "default": "secrets_expert_switch_guide" } },
+      "minecraft:interact_button": true,
+      "secrets_expert:read_switch_guide": {}
+    }
+  }
+}

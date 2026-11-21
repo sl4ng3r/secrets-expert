@@ -1,0 +1,21 @@
+{
+  "format_version": "1.21.120",
+  "minecraft:local_light_settings": {
+    "secrets_expert:switch_torch": {
+      "light_color": "#EFE39D",
+      "light_type": "point_light"
+    },
+    "secrets_expert:switch_copper_torch": {
+      "light_color": "#B8EF8D",
+      "light_type": "point_light"
+    },
+    "secrets_expert:switch_soul_torch": {
+      "light_color": "#00FFFF",
+      "light_type": "point_light"
+    },
+    "secrets_expert:switch_end_rod": {
+      "light_color": "#FFFFFF",
+      "light_type": "point_light"
+    }
+  }
+}

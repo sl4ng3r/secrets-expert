@@ -1,0 +1,28 @@
+{
+  "format_version": "1.21.30",
+  "minecraft:recipe_shapeless": {
+    "description": {
+      "identifier": "secrets_expert:switch_dead_horn_coral_fan"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "ingredients": [
+      {
+        "item": "minecraft:dead_horn_coral_fan"
+      },
+      {
+        "item": "minecraft:redstone"
+      }
+    ],
+    "unlock": [
+      {
+        "item": "minecraft:dead_horn_coral_fan"
+      }
+    ],
+    "result": {
+      "item": "secrets_expert:switch_dead_horn_coral_fan",
+      "count": 1
+    }
+  }
+}

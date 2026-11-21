@@ -1,0 +1,11 @@
+{
+  "name": "secrets-expert",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node tools/generate-switches.js",
+    "test": "node tools/generate-switches.js --check && node --test tests/*.test.js && python3 -m unittest discover -s tests",
+    "build": "npm run generate && npm test && python3 tools/build_addon.py && python3 tools/build_addon.py --check"
+  }
+}

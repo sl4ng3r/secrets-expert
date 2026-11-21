@@ -1,0 +1,12 @@
+{
+  "resource_pack_name": "secrets_expert",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "secrets_expert_stealth_helmet": {
+      "textures": "textures/items/stealth_helmet"
+    },
+    "secrets_expert_switch_guide": {
+      "textures": "textures/items/switch_guide"
+    }
+  }
+}

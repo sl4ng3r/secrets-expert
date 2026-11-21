@@ -1,0 +1,36 @@
+{
+  "resource_pack_name": "secrets_expert",
+  "texture_name": "atlas.terrain",
+  "texture_data": {
+    "secrets_expert_torch": {
+      "textures": "textures/blocks/torch_on"
+    },
+    "secrets_expert_copper_torch": {
+      "textures": "textures/blocks/copper_torch"
+    },
+    "secrets_expert_soul_torch": {
+      "textures": "textures/blocks/soul_torch"
+    },
+    "secrets_expert_skeleton_skull": {
+      "textures": "textures/entity/skeleton/skeleton"
+    },
+    "secrets_expert_end_rod": {
+      "textures": "textures/blocks/end_rod"
+    },
+    "secrets_expert_dead_horn_coral_fan": {
+      "textures": "textures/blocks/coral_fan_yellow_dead"
+    },
+    "secrets_expert_glow_lichen": {
+      "textures": "textures/blocks/glow_lichen"
+    },
+    "secrets_expert_oak_slab": {
+      "textures": "textures/blocks/planks_oak"
+    },
+    "secrets_expert_glass_pane": {
+      "textures": "textures/blocks/glass"
+    },
+    "secrets_expert_glass_edge": {
+      "textures": "textures/blocks/glass_pane_top"
+    }
+  }
+}

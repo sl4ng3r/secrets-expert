@@ -1,0 +1,244 @@
+{
+  "format_version": "1.26.40",
+  "minecraft:block": {
+    "description": {
+      "identifier": "secrets_expert:switch_glow_lichen",
+      "menu_category": {
+        "category": "construction"
+      },
+      "states": {
+        "secrets_expert:powered": [
+          false,
+          true
+        ]
+      },
+      "traits": {
+        "minecraft:placement_position": {
+          "enabled_states": [
+            "minecraft:block_face"
+          ]
+        }
+      }
+    },
+    "components": {
+      "minecraft:display_name": "tile.secrets_expert:switch_glow_lichen.name",
+      "minecraft:geometry": {
+        "identifier": "geometry.secrets_expert.switch_lichen"
+      },
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "secrets_expert_glow_lichen",
+          "render_method": "alpha_test"
+        }
+      },
+      "minecraft:placement_filter": {
+        "conditions": [
+          {
+            "allowed_faces": [
+              "north",
+              "east",
+              "south",
+              "west"
+            ],
+            "block_filter": [
+              "minecraft:stone",
+              "minecraft:smooth_stone",
+              "minecraft:cobblestone",
+              "minecraft:mossy_cobblestone",
+              "minecraft:stone_bricks",
+              "minecraft:mossy_stone_bricks",
+              "minecraft:cracked_stone_bricks",
+              "minecraft:chiseled_stone_bricks",
+              "minecraft:granite",
+              "minecraft:diorite",
+              "minecraft:andesite",
+              "minecraft:polished_granite",
+              "minecraft:polished_diorite",
+              "minecraft:polished_andesite",
+              "minecraft:deepslate",
+              "minecraft:cobbled_deepslate",
+              "minecraft:polished_deepslate",
+              "minecraft:deepslate_bricks",
+              "minecraft:deepslate_tiles",
+              "minecraft:tuff",
+              "minecraft:polished_tuff",
+              "minecraft:tuff_bricks",
+              "minecraft:calcite",
+              "minecraft:brick_block",
+              "minecraft:mud_bricks",
+              "minecraft:sandstone",
+              "minecraft:red_sandstone",
+              "minecraft:netherrack",
+              "minecraft:nether_brick",
+              "minecraft:blackstone",
+              "minecraft:polished_blackstone",
+              "minecraft:end_stone",
+              "minecraft:end_bricks",
+              "minecraft:quartz_block",
+              "minecraft:smooth_quartz",
+              "minecraft:oak_planks",
+              "minecraft:spruce_planks",
+              "minecraft:birch_planks",
+              "minecraft:jungle_planks",
+              "minecraft:acacia_planks",
+              "minecraft:dark_oak_planks",
+              "minecraft:mangrove_planks",
+              "minecraft:cherry_planks",
+              "minecraft:pale_oak_planks",
+              "minecraft:hardened_clay",
+              "minecraft:white_concrete",
+              "minecraft:gray_concrete",
+              "minecraft:light_gray_concrete",
+              "minecraft:black_concrete"
+            ]
+          }
+        ]
+      },
+      "minecraft:collision_box": false,
+      "minecraft:selection_box": {
+        "origin": [
+          -8,
+          0,
+          -8
+        ],
+        "size": [
+          16,
+          16,
+          1
+        ]
+      },
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 0.1
+      },
+      "minecraft:light_dampening": 0,
+      "minecraft:redstone_producer": {
+        "power": 0
+      },
+      "minecraft:loot": "loot_tables/blocks/switch_glow_lichen.json",
+      "secrets_expert:switch": {},
+      "minecraft:light_emission": 7
+    },
+    "permutations": [
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'north' && q.block_state('secrets_expert:powered')",
+        "components": {
+          "minecraft:redstone_producer": {
+            "power": 15,
+            "connected_faces": [
+              "south"
+            ],
+            "strongly_powered_face": "south",
+            "transform_relative": false
+          },
+          "minecraft:tick": {
+            "interval_range": [
+              20,
+              20
+            ],
+            "looping": true
+          },
+          "secrets_expert:switch_reset": {}
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'north'",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              180,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'east' && q.block_state('secrets_expert:powered')",
+        "components": {
+          "minecraft:redstone_producer": {
+            "power": 15,
+            "connected_faces": [
+              "west"
+            ],
+            "strongly_powered_face": "west",
+            "transform_relative": false
+          },
+          "minecraft:tick": {
+            "interval_range": [
+              20,
+              20
+            ],
+            "looping": true
+          },
+          "secrets_expert:switch_reset": {}
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'east'",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              90,
+              0
+            ]
+          }
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'south' && q.block_state('secrets_expert:powered')",
+        "components": {
+          "minecraft:redstone_producer": {
+            "power": 15,
+            "connected_faces": [
+              "north"
+            ],
+            "strongly_powered_face": "north",
+            "transform_relative": false
+          },
+          "minecraft:tick": {
+            "interval_range": [
+              20,
+              20
+            ],
+            "looping": true
+          },
+          "secrets_expert:switch_reset": {}
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'west' && q.block_state('secrets_expert:powered')",
+        "components": {
+          "minecraft:redstone_producer": {
+            "power": 15,
+            "connected_faces": [
+              "east"
+            ],
+            "strongly_powered_face": "east",
+            "transform_relative": false
+          },
+          "minecraft:tick": {
+            "interval_range": [
+              20,
+              20
+            ],
+            "looping": true
+          },
+          "secrets_expert:switch_reset": {}
+        }
+      },
+      {
+        "condition": "q.block_state('minecraft:block_face') == 'west'",
+        "components": {
+          "minecraft:transformation": {
+            "rotation": [
+              0,
+              -90,
+              0
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

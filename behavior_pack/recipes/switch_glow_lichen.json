@@ -1,0 +1,28 @@
+{
+  "format_version": "1.21.30",
+  "minecraft:recipe_shapeless": {
+    "description": {
+      "identifier": "secrets_expert:switch_glow_lichen"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "ingredients": [
+      {
+        "item": "minecraft:glow_lichen"
+      },
+      {
+        "item": "minecraft:redstone"
+      }
+    ],
+    "unlock": [
+      {
+        "item": "minecraft:glow_lichen"
+      }
+    ],
+    "result": {
+      "item": "secrets_expert:switch_glow_lichen",
+      "count": 1
+    }
+  }
+}

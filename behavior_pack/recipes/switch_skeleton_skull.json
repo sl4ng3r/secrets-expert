@@ -1,0 +1,28 @@
+{
+  "format_version": "1.21.30",
+  "minecraft:recipe_shapeless": {
+    "description": {
+      "identifier": "secrets_expert:switch_skeleton_skull"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "ingredients": [
+      {
+        "item": "minecraft:skeleton_skull"
+      },
+      {
+        "item": "minecraft:redstone"
+      }
+    ],
+    "unlock": [
+      {
+        "item": "minecraft:skeleton_skull"
+      }
+    ],
+    "result": {
+      "item": "secrets_expert:switch_skeleton_skull",
+      "count": 1
+    }
+  }
+}
