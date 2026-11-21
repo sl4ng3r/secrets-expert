@@ -24,7 +24,7 @@ Beim Tragen blendet das Add-on das Namensschild über deinem Kopf aus. Bedrock v
 
 1. Öffne die aktuelle [Installationsdatei `secrets-expert.mcaddon`](dist/secrets-expert.mcaddon) mit einem Bedrock-Client ab **26.40**, der Add-on-Dateien importieren kann. Die beiden importierten Packs heißen **Secrets Expert** und **Secrets Expert – Ressourcen**.
 2. Öffne als Realm-Besitzer den Realm Hub. Wähle unter **Welt** einen separaten Test-Weltslot aus und öffne **Welt bearbeiten**.
-3. Aktiviere **Secrets Expert** unter Verhaltenspakete. Prüfe, dass **Secrets Expert – Ressourcen** ebenfalls aktiv ist. Lass die Experimente ausgeschaltet.
+3. Aktiviere **Secrets Expert** unter Verhaltenspakete oder **Secrets Expert – Ressourcen** unter Ressourcenpakete. Dank der gegenseitigen Abhängigkeit aktiviert Bedrock das jeweils andere Paket mit. Lass die Experimente ausgeschaltet.
 4. Kehre zum Realm Hub zurück und warte auf den Upload. Tritt der Testwelt mit beiden Bedrock-Clients bei. [Minecraft Help · Add-ons im Realm aktivieren](https://help.minecraft.net/hc/en-us/articles/24120525083533-How-to-activate-Minecraft-Add-On)
 
 ## Abnahme mit zwei Spielern

@@ -46,6 +46,8 @@ class PackagingTests(unittest.TestCase):
         self.assertEqual(behavior["header"]["name"], "Secrets Expert")
         self.assertEqual(resources["header"]["name"], "Secrets Expert – Ressourcen")
         self.assertIn({"uuid": resources["header"]["uuid"], "version": version}, behavior["dependencies"])
+        self.assertEqual(resources["header"]["pack_scope"], "world")
+        self.assertEqual(resources["dependencies"], [{"uuid": behavior["header"]["uuid"], "version": version}])
         self.assertIn({"module_name": "@minecraft/server", "version": "2.8.0"}, behavior["dependencies"])
         self.assertIn({"module_name": "@minecraft/server-ui", "version": "2.0.0"}, behavior["dependencies"])
         self.assertEqual([part["type"] for part in behavior["modules"]], ["data", "script"])
@@ -101,6 +103,23 @@ class PackagingTests(unittest.TestCase):
         behavior_icon, resource_icon = (pack / "pack_icon.png" for pack in (BP, RP))
         self.assertEqual(png_header(behavior_icon)[:2], (256, 256))
         self.assertEqual(behavior_icon.read_bytes(), resource_icon.read_bytes())
+
+    def test_end_rod_mesh_fits_its_block_and_reaches_the_wall(self):
+        block = data(BP / "blocks/switch_end_rod.json")["minecraft:block"]
+        model = block["components"]["minecraft:geometry"]["identifier"]
+        geometries = data(RP / "models/blocks/secret_switches.geo.json")["minecraft:geometry"]
+        geometry = next(geometry for geometry in geometries if geometry["description"]["identifier"] == model)
+        bounds = [(-8, 8), (0, 16), (-8, 8)]
+        depth = []
+        for bone in geometry["bones"]:
+            self.assertNotIn("rotation", bone)
+            for cube in bone["cubes"]:
+                self.assertNotIn("rotation", cube)
+                for (lower, upper), origin, size in zip(bounds, cube["origin"], cube["size"]):
+                    self.assertGreaterEqual(origin, lower)
+                    self.assertLessEqual(origin + size, upper)
+                depth.append((cube["origin"][2], cube["origin"][2] + cube["size"][2]))
+        self.assertEqual(sorted(depth), [(-8, -7), (-7, 8)])
 
     def test_wearable_geometry_and_texture_are_linked(self):
         attachable = data(RP / "attachables/stealth_helmet.json")["minecraft:attachable"]["description"]

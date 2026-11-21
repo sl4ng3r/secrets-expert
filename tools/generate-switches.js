@@ -50,6 +50,21 @@ const torchCross = [
   box([-8, 2, -7.5], [16, 13, 0], faceMap(['north', 'south'], [0, 0], [16, 16])),
   box([0, 2, -15.5], [0, 13, 16], faceMap(['east', 'west'], [0, 0], [16, 16])),
 ];
+
+// Model the end rod horizontally inside the block. Bedrock rejects the old
+// vertical bone after rotating its bounds at the wall.
+const rodBase = box([-2, 6, -8], [4, 4, 1], {
+  ...faceMap(['north', 'south'], [2, 3], [4, 4]),
+  ...faceMap(['up', 'down'], [2, 2], [4, 1]),
+  east: { ...faceUv([2, 2], [4, 1]), uv_rotation: 90 },
+  west: { ...faceUv([2, 2], [4, 1]), uv_rotation: 270 },
+});
+const rodShaft = box([-1, 7, -7], [2, 2, 15], {
+  ...faceMap(['north', 'south'], [2, 0], [2, 2]),
+  ...faceMap(['up', 'down'], [0, 0], [2, 15]),
+  east: { ...faceUv([0, 0], [2, 15]), uv_rotation: 90 },
+  west: { ...faceUv([0, 0], [2, 15]), uv_rotation: 270 },
+});
 const selection = {
   torch: box([-4, 0, -8], [8, 13, 11]),
   skull: box([-4, 4, -8], [8, 8, 8]),
@@ -82,10 +97,7 @@ function paneBone(name, shape) {
 const meshes = {
   torch: [{ name: 'main', pivot: [0, 2, -7.5], rotation: [22.5, 0, 0], cubes: torchCross }],
   skull: [{ name: 'main', pivot: [0, 0, 0], cubes: [box([-4, 4, -8], [8, 8, 8], [0, 0])] }],
-  rod: [{ name: 'main', pivot: [0, 8, -8], rotation: [90, 0, 0], cubes: [
-    box([-2, 8, -10], [4, 1, 4], [0, 10]),
-    box([-1, 9, -9], [2, 15, 2], [0, 0]),
-  ] }],
+  rod: [{ name: 'main', pivot: [0, 0, 0], cubes: [rodBase, rodShaft] }],
   coral: [{ name: 'main', pivot: [0, 6, -8], rotation: [-35, 0, 0], cubes: [
     box([-8, 6, -8], [16, 0, 12], faceMap(['up', 'down'], [0, 0], [16, 16])),
   ] }],
@@ -216,7 +228,7 @@ for (const variant of SWITCHES) {
 }
 
 put('resource_pack/models/blocks/secret_switches.geo.json', {
-  format_version: '1.12.0', 'minecraft:geometry': geometry,
+  format_version: '1.21.0', 'minecraft:geometry': geometry,
 });
 put('resource_pack/textures/terrain_texture.json', {
   resource_pack_name: NAMESPACE, texture_name: 'atlas.terrain',
