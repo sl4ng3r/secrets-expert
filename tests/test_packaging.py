@@ -149,6 +149,7 @@ class PackagingTests(unittest.TestCase):
                 geometry = next(geometry for geometry in geometries if geometry["description"]["identifier"] == model)
                 shaft, = geometry["bones"][0]["cubes"]
                 self.assertEqual(shaft["size"], [2, 10, 2])
+                self.assertEqual(shaft["rotation"], [-22.5, 0, 0], "The tip must lean away from the wall")
                 for face in ("north", "east", "south", "west"):
                     self.assertEqual(shaft["uv"][face], {"uv": [7, 6], "uv_size": [2, 10]})
 

@@ -2,7 +2,7 @@ import { EntityComponentTypes, EquipmentSlot, system } from '@minecraft/server';
 import { ActionFormData } from '@minecraft/server-ui';
 import { NAMESPACE } from './switch-catalog.js';
 import { guideBody } from './switch-guide.js';
-import { activateSwitch, preparePlacement, stopPulse } from './switch-logic.js';
+import { activateSwitch, emitTorchParticles, preparePlacement, stopPulse } from './switch-logic.js';
 
 const openGuides = new Set();
 
@@ -32,6 +32,9 @@ system.beforeEvents.startup.subscribe(({ blockComponentRegistry, itemComponentRe
   });
   blockComponentRegistry.registerCustomComponent(`${NAMESPACE}:switch_reset`, {
     onTick({ block }) { stopPulse(block); },
+  });
+  blockComponentRegistry.registerCustomComponent(`${NAMESPACE}:torch_ambience`, {
+    onTick({ block }, { params }) { emitTorchParticles(block, params.flame); },
   });
   itemComponentRegistry.registerCustomComponent(`${NAMESPACE}:read_switch_guide`, {
     onUse({ source }) { void showGuide(source); },

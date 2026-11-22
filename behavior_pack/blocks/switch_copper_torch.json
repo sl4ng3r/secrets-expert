@@ -65,7 +65,17 @@
       },
       "minecraft:loot": "loot_tables/blocks/switch_copper_torch.json",
       "secrets_expert:switch": {},
-      "minecraft:light_emission": 14
+      "minecraft:light_emission": 14,
+      "minecraft:tick": {
+        "interval_range": [
+          20,
+          20
+        ],
+        "looping": true
+      },
+      "secrets_expert:torch_ambience": {
+        "flame": "secrets_expert:copper_torch_flame"
+      }
     },
     "permutations": [
       {

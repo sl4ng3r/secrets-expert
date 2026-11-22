@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { SWITCHES } from '../behavior_pack/scripts/switch-catalog.js';
 import { guideBody } from '../behavior_pack/scripts/switch-guide.js';
-import { ACTIVITY_STATE, FACE_STATE, activateSwitch, preparePlacement, stopPulse } from '../behavior_pack/scripts/switch-logic.js';
+import { ACTIVITY_STATE, FACE_STATE, activateSwitch, emitTorchParticles, preparePlacement, stopPulse } from '../behavior_pack/scripts/switch-logic.js';
 
 const bp = new URL('../behavior_pack/', import.meta.url);
 const rp = new URL('../resource_pack/', import.meta.url);
@@ -67,7 +67,7 @@ test('each block has four powered orientations, a native reset tick, and an inac
     assert.equal(block.description.identifier, `secrets_expert:${name}`);
     assert.equal(block.components['minecraft:display_name'], nameKey);
     assert.equal(block.components['minecraft:redstone_producer'].power, 0);
-    assert.equal(block.components['minecraft:tick'], undefined);
+    if (!block.components['secrets_expert:torch_ambience']) assert.equal(block.components['minecraft:tick'], undefined);
     assert.deepEqual(block.components['minecraft:placement_filter'].conditions, [
       { allowed_faces: ['north', 'east', 'south', 'west'] },
     ]);
@@ -82,6 +82,42 @@ test('each block has four powered orientations, a native reset tick, and an inac
       assert.deepEqual(output.components['minecraft:tick'].interval_range, [20, 20]);
       assert.ok(output.components['secrets_expert:switch_reset']);
     }
+  }
+});
+
+test('the three torch switches emit the matching flame sprite and smoke even when unpowered', () => {
+  const sprites = { torch: [0, 24], soul_torch: [16, 24], copper_torch: [32, 56] };
+  for (const { model, original, name } of SWITCHES) {
+    const { components } = json(bp, `blocks/${name}.json`)['minecraft:block'];
+    const ambience = components['secrets_expert:torch_ambience'];
+    if (model !== 'torch') {
+      assert.equal(ambience, undefined);
+      continue;
+    }
+    assert.deepEqual(components['minecraft:tick'], { interval_range: [20, 20], looping: true });
+    assert.deepEqual(ambience, { flame: `secrets_expert:${original}_flame` });
+    const effect = json(rp, `particles/${original}_flame.json`).particle_effect;
+    assert.equal(effect.description.identifier, ambience.flame);
+    assert.deepEqual(effect.components['minecraft:particle_appearance_billboard'].uv.uv, sprites[original]);
+    assert.deepEqual(effect.components['minecraft:emitter_rate_instant'], { num_particles: 1 });
+  }
+  const smoke = json(rp, 'particles/torch_smoke.json').particle_effect;
+  assert.equal(smoke.description.identifier, 'secrets_expert:torch_smoke');
+  assert.deepEqual(smoke.components['minecraft:emitter_rate_instant'], { num_particles: 1 });
+});
+
+test('torch effects start at the outward tip in all four wall orientations', () => {
+  for (const [face, { offset }] of Object.entries(directions)) {
+    const block = wallSwitch(face);
+    const effects = [];
+    block.location = { x: 4, y: 80, z: -5 };
+    block.dimension = { spawnParticle: (id, location) => effects.push({ id, location }) };
+    const origin = { x: 4.5 + offset.x * 3 / 16, y: 80 + 13 / 16, z: -4.5 + offset.z * 3 / 16 };
+    emitTorchParticles(block, 'secrets_expert:torch_flame');
+    assert.deepEqual(effects, [
+      { id: 'secrets_expert:torch_flame', location: origin },
+      { id: 'secrets_expert:torch_smoke', location: origin },
+    ]);
   }
 });
 
