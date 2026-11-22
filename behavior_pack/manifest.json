@@ -4,25 +4,25 @@
     "name": "Secrets Expert",
     "description": "Tarnhelm, Geheimschalter und Handbuch. / Stealth Helmet, secret switches, and handbook.",
     "uuid": "b46bf1ae-334c-4fc5-864b-a810d6112c75",
-    "version": [0, 2, 4],
+    "version": [0, 2, 5],
     "min_engine_version": [1, 26, 40]
   },
   "modules": [
     {
       "type": "data",
       "uuid": "2a5eb61e-19ea-41f9-867f-7031a1acba65",
-      "version": [0, 2, 4]
+      "version": [0, 2, 5]
     },
     {
       "type": "script",
       "language": "javascript",
       "entry": "scripts/main.js",
       "uuid": "088da9f7-6887-46b8-bcb8-a9e0414fc6e7",
-      "version": [0, 2, 4]
+      "version": [0, 2, 5]
     }
   ],
   "dependencies": [
-    { "uuid": "dcad6f3a-2340-43dd-a24f-e205fac8f6cb", "version": [0, 2, 4] },
+    { "uuid": "dcad6f3a-2340-43dd-a24f-e205fac8f6cb", "version": [0, 2, 5] },
     { "module_name": "@minecraft/server", "version": "2.8.0" },
     { "module_name": "@minecraft/server-ui", "version": "2.0.0" }
   ]

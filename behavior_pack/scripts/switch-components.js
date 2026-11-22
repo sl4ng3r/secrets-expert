@@ -1,10 +1,13 @@
-import { EntityComponentTypes, EquipmentSlot, system } from '@minecraft/server';
+import { EntityComponentTypes, EquipmentSlot, system, world } from '@minecraft/server';
 import { ActionFormData } from '@minecraft/server-ui';
 import { NAMESPACE } from './switch-catalog.js';
 import { guideBody } from './switch-guide.js';
-import { activateSwitch, emitTorchParticles, preparePlacement, stopPulse } from './switch-logic.js';
+import { activateSwitch, emitTorchParticles, handleSwitchInteraction, preparePlacement, stopPulse } from './switch-logic.js';
 
 const openGuides = new Set();
+const defer = system.run.bind(system);
+
+world.beforeEvents.playerInteractWithBlock.subscribe((event) => handleSwitchInteraction(event, defer));
 
 async function showGuide(player) {
   if (!player.isValid || openGuides.has(player.id)) return;
@@ -25,9 +28,10 @@ async function showGuide(player) {
 system.beforeEvents.startup.subscribe(({ blockComponentRegistry, itemComponentRegistry }) => {
   blockComponentRegistry.registerCustomComponent(`${NAMESPACE}:switch`, {
     beforeOnPlayerPlace: preparePlacement,
+    // Bedrock can dispatch an empty-hand interaction directly to the block component.
     onPlayerInteract({ block, player }) {
       const equipment = player?.getComponent(EntityComponentTypes.Equippable);
-      if (equipment) activateSwitch(block, !equipment.getEquipment(EquipmentSlot.Mainhand));
+      if (equipment && !equipment.getEquipment(EquipmentSlot.Mainhand)) activateSwitch(block);
     },
   });
   blockComponentRegistry.registerCustomComponent(`${NAMESPACE}:switch_reset`, {

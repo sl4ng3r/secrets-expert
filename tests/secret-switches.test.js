@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { SWITCHES } from '../behavior_pack/scripts/switch-catalog.js';
 import { guideBody } from '../behavior_pack/scripts/switch-guide.js';
-import { ACTIVITY_STATE, FACE_STATE, activateSwitch, emitTorchParticles, preparePlacement, stopPulse } from '../behavior_pack/scripts/switch-logic.js';
+import { ACTIVITY_STATE, FACE_STATE, emitTorchParticles, handleSwitchInteraction, preparePlacement, stopPulse } from '../behavior_pack/scripts/switch-logic.js';
 
 const bp = new URL('../behavior_pack/', import.meta.url);
 const rp = new URL('../resource_pack/', import.meta.url);
@@ -29,6 +29,7 @@ function permutation(states) {
 function wallSwitch(face = 'north', support = 'minecraft:stone') {
   return {
     typeId: 'secrets_expert:switch_torch',
+    isValid: true,
     permutation: permutation({ [ACTIVITY_STATE]: false, [FACE_STATE]: face }),
     writes: 0,
     offset(offset) {
@@ -37,6 +38,13 @@ function wallSwitch(face = 'north', support = 'minecraft:stone') {
     },
     setPermutation(next) { this.permutation = next; this.writes++; },
   };
+}
+
+function click(block, { itemStack, isSneaking = false, isFirstEvent = true, cancel = false } = {}) {
+  const event = { block, itemStack, player: { isSneaking }, isFirstEvent, cancel };
+  const pending = [];
+  handleSwitchInteraction(event, (callback) => pending.push(callback));
+  return { event, pending };
 }
 
 test('all nine craftable switches appear in the reading UI and resolve in both languages', () => {
@@ -124,8 +132,8 @@ test('torch effects start at the outward tip in all four wall orientations', () 
 test('activates a wall switch once and resets only the powered state', () => {
   for (const face of Object.keys(directions)) {
     const block = wallSwitch(face);
-    activateSwitch(block, true);
-    activateSwitch(block, true);
+    click(block).pending[0]();
+    click(block).pending[0]();
     assert.equal(block.permutation.getState(ACTIVITY_STATE), true);
     assert.equal(block.writes, 1);
     stopPulse(block);
@@ -136,16 +144,69 @@ test('activates a wall switch once and resets only the powered state', () => {
   }
 });
 
-test('tools, vanilla blocks and unsupported placements cause no pulse', () => {
-  const noSupport = wallSwitch('east', 'minecraft:air');
+test('all switch variants consume a normal use click with empty hand, a tool or a building block', () => {
+  for (const { id } of SWITCHES) {
+    for (const itemStack of [undefined, { typeId: 'minecraft:iron_pickaxe' }, { typeId: 'minecraft:cobblestone' }]) {
+      const block = { ...wallSwitch(), typeId: id };
+      const { event, pending } = click(block, { itemStack });
+      assert.equal(event.cancel, true);
+      assert.equal(block.writes, 0, 'world changes must happen after the before-event');
+      assert.equal(pending.length, 1);
+      pending[0]();
+      assert.equal(block.permutation.getState(ACTIVITY_STATE), true);
+    }
+  }
+});
+
+test('sneaking with an item, ordinary blocks and cancelled clicks pass through without a pulse', () => {
+  const block = wallSwitch();
+  const vanilla = { ...block, typeId: 'minecraft:torch' };
+  for (const [target, options] of [
+    [block, { isSneaking: true, itemStack: { typeId: 'minecraft:stone' } }],
+    [vanilla, {}],
+    [block, { cancel: true }],
+  ]) {
+    const { event, pending } = click(target, options);
+    assert.equal(event.cancel, options.cancel ?? false);
+    assert.equal(pending.length, 0);
+    assert.equal(target.writes, 0);
+  }
+  const { event, pending } = click(block, { isSneaking: true });
+  assert.equal(event.cancel, true);
+  assert.equal(pending.length, 1);
+});
+
+test('holding use consumes repeats without firing again and a fresh press reactivates the switch', () => {
+  const block = wallSwitch();
+  const itemStack = { typeId: 'minecraft:stone' };
+  click(block, { itemStack }).pending[0]();
+  stopPulse(block);
+  const repeat = click(block, { itemStack, isFirstEvent: false });
+  assert.equal(repeat.event.cancel, true);
+  assert.equal(repeat.pending.length, 0);
+  assert.equal(block.permutation.getState(ACTIVITY_STATE), false);
+  click(block, { itemStack }).pending[0]();
+  assert.equal(block.permutation.getState(ACTIVITY_STATE), true);
+});
+
+test('deferred activation skips removed, changed, unloaded or unsupported switches', () => {
+  for (const change of [
+    (block) => { block.typeId = 'minecraft:air'; },
+    (block) => { block.typeId = 'secrets_expert:switch_soul_torch'; },
+    (block) => { block.permutation = block.permutation.withState(FACE_STATE, 'east'); },
+    (block) => { block.isValid = false; },
+    (block) => { block.offset = () => ({ isAir: true, isLiquid: false }); },
+    (block) => { block.offset = () => undefined; },
+  ]) {
+    const block = wallSwitch();
+    const { pending } = click(block);
+    change(block);
+    pending[0]();
+    assert.equal(block.writes, 0);
+  }
   const floor = wallSwitch('up');
-  const vanilla = { ...wallSwitch(), typeId: 'minecraft:torch' };
-  const switchWithItem = wallSwitch();
-  activateSwitch(noSupport, true);
-  activateSwitch(floor, true);
-  activateSwitch(vanilla, true);
-  activateSwitch(switchWithItem, false);
-  for (const block of [noSupport, floor, vanilla, switchWithItem]) assert.equal(block.writes, 0);
+  click(floor).pending[0]();
+  assert.equal(floor.writes, 0);
 });
 
 test('placing on a vanilla-approved wall starts unpowered without a separate list of block types', () => {

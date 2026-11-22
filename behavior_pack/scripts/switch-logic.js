@@ -28,9 +28,23 @@ export function preparePlacement(event) {
   event.permutationToPlace = event.permutationToPlace.withState(FACE_STATE, face).withState(ACTIVITY_STATE, false);
 }
 
-export function activateSwitch(block, emptyMainHand) {
-  if (!emptyMainHand || !switchIds.has(block.typeId)) return;
-  const { permutation } = block;
+export function handleSwitchInteraction(event, defer) {
+  if (event.cancel || (event.itemStack && event.player.isSneaking)) return;
+  const { block } = event;
+  const { typeId } = block;
+  if (!switchIds.has(typeId)) return;
+
+  event.cancel = true;
+  if (!event.isFirstEvent) return;
+  const face = block.permutation.getState(FACE_STATE);
+  defer(() => {
+    if (!block.isValid || block.typeId !== typeId) return;
+    const permutation = block.permutation;
+    if (permutation.getState(FACE_STATE) === face) activateSwitch(block, permutation);
+  });
+}
+
+export function activateSwitch(block, permutation = block.permutation) {
   if (permutation.getState(ACTIVITY_STATE) || !hasSupport(block, permutation.getState(FACE_STATE))) return;
   block.setPermutation(permutation.withState(ACTIVITY_STATE, true));
 }
