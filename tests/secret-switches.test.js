@@ -93,8 +93,8 @@ test('each block has four powered orientations, a native reset tick, and an inac
   }
 });
 
-test('the three torch switches emit the matching flame sprite and smoke even when unpowered', () => {
-  const sprites = { torch: [0, 24], soul_torch: [16, 24], copper_torch: [32, 56] };
+test('the three torch switches emit the original flame and dark smoke even when unpowered', () => {
+  const flames = { torch: 'basic_flame_particle', soul_torch: 'blue_flame_particle', copper_torch: 'green_flame_particle' };
   for (const { model, original, name } of SWITCHES) {
     const { components } = json(bp, `blocks/${name}.json`)['minecraft:block'];
     const ambience = components['secrets_expert:torch_ambience'];
@@ -103,15 +103,15 @@ test('the three torch switches emit the matching flame sprite and smoke even whe
       continue;
     }
     assert.deepEqual(components['minecraft:tick'], { interval_range: [20, 20], looping: true });
-    assert.deepEqual(ambience, { flame: `secrets_expert:${original}_flame` });
-    const effect = json(rp, `particles/${original}_flame.json`).particle_effect;
-    assert.equal(effect.description.identifier, ambience.flame);
-    assert.deepEqual(effect.components['minecraft:particle_appearance_billboard'].uv.uv, sprites[original]);
-    assert.deepEqual(effect.components['minecraft:emitter_rate_instant'], { num_particles: 1 });
+    assert.deepEqual(ambience, { effect: `secrets_expert:${original}_ambience` });
+    const effect = json(rp, `particles/${original}_ambience.json`).particle_effect;
+    assert.equal(effect.description.identifier, ambience.effect);
+    const event = effect.components['minecraft:emitter_lifetime_events'].creation_event;
+    assert.deepEqual(effect.events[event].sequence, [
+      { particle_effect: { effect: `minecraft:${flames[original]}`, type: 'particle' } },
+      { particle_effect: { effect: 'minecraft:basic_smoke_particle', type: 'particle' } },
+    ]);
   }
-  const smoke = json(rp, 'particles/torch_smoke.json').particle_effect;
-  assert.equal(smoke.description.identifier, 'secrets_expert:torch_smoke');
-  assert.deepEqual(smoke.components['minecraft:emitter_rate_instant'], { num_particles: 1 });
 });
 
 test('torch effects start at the outward tip in all four wall orientations', () => {
@@ -121,12 +121,20 @@ test('torch effects start at the outward tip in all four wall orientations', () 
     block.location = { x: 4, y: 80, z: -5 };
     block.dimension = { spawnParticle: (id, location) => effects.push({ id, location }) };
     const origin = { x: 4.5 + offset.x * 3.5 / 16, y: 80 + 13 / 16, z: -4.5 + offset.z * 3.5 / 16 };
-    emitTorchParticles(block, 'secrets_expert:torch_flame');
-    assert.deepEqual(effects, [
-      { id: 'secrets_expert:torch_flame', location: origin },
-      { id: 'secrets_expert:torch_smoke', location: origin },
-    ]);
+    emitTorchParticles(block, 'secrets_expert:torch_ambience', 0.1);
+    assert.deepEqual(effects, [{ id: 'secrets_expert:torch_ambience', location: origin }]);
   }
+});
+
+test('only four of ten evenly spaced rolls trigger the ambient particle pair', () => {
+  const block = wallSwitch();
+  block.location = { x: 0, y: 80, z: 0 };
+  let emissions = 0;
+  block.dimension = { spawnParticle: () => emissions++ };
+  for (let index = 0; index < 10; index++) {
+    emitTorchParticles(block, 'secrets_expert:torch_ambience', (index + 0.5) / 10);
+  }
+  assert.equal(emissions, 4);
 });
 
 test('activates a wall switch once and resets only the powered state', () => {

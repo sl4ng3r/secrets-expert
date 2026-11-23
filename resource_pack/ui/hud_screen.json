@@ -8,7 +8,7 @@
     "type": "image",
     "$secrets_expert_text": "$actionbar_text",
     "visible": "($secrets_expert_text = '\u2063\u200b\u2060')",
-    "texture": "textures/items/stealth_helmet",
+    "texture": "textures/ui/stealth_status",
     "size": [19, 19],
     "anchor_from": "top_right",
     "anchor_to": "top_right",

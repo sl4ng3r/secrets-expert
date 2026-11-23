@@ -20,7 +20,7 @@ Aus **einem Buch und einem Redstone-Staub** craftest du das **Geheimschalter-Han
 
 Ein Lederhelm und ein Tintensack ergeben an der Werkbank einen **Tarnhelm**. Die Anordnung ist frei. Alternativ findest du den Helm unter **Ausrüstung** im Kreativinventar.
 
-Beim Tragen blendet das Add-on das Namensschild über deinem Kopf aus. Bedrock verbirgt zusätzlich deinen Marker auf der Locator-Leiste und auf Ortungskarten. Das Helm-Symbol oben rechts zeigt dir den aktiven Tarnstatus. Deine Spielfigur bleibt sichtbar. Der Helm hat keine Rüstungspunkte und verschleißt nicht.
+Beim Tragen blendet das Add-on das Namensschild über deinem Kopf aus. Bedrock verbirgt zusätzlich deinen Marker auf der Locator-Leiste und auf Ortungskarten. Ein durchgestrichenes Auge oben rechts zeigt dir den aktiven Tarnstatus. Deine Spielfigur bleibt sichtbar. Der Helm hat keine Rüstungspunkte und verschleißt nicht.
 
 ## In einem Realm installieren
 
@@ -35,7 +35,7 @@ Beim Tragen blendet das Add-on das Namensschild über deinem Kopf aus. Bedrock v
 - **Fackelvergleich.** Setze je eine normale Fackel, Seelenfackel und Kupferfackel neben ihren Geheimschalter an allen vier Seiten einer Steinwand. Vergleiche am Tag Neigung und Kontakt zur Wand. Prüfe nachts Flammenposition, Flammenfarbe, Rauch und Licht.
 - **Handbuch.** Stelle es im Survival her, öffne es über Benutzen und prüfe in deutscher und englischer Spielsprache Inventar-Icon, Titel, Rezept und alle neun Einträge.
 - **Darstellung.** Prüfe die Pack-Icons und Anzeigenamen in den Paketübersichten, die vom Hauptmenü und über die Welteinstellungen erreichbar sind. Prüfe das Helm-Icon und den Namen **Tarnhelm** bzw. **Stealth Helmet** im Inventar, in der Schnellleiste und im Rezeptbuch auf Deutsch und Englisch. Vergleiche das Modell auf dem Kopf mit dem Icon.
-- **Tarnstatus.** Setze den Helm auf, warte einige Sekunden und setze ihn wieder ab. Nur der Träger soll das Helm-Symbol oben rechts sehen. Beim Auf- und Absetzen soll die Actionbar unten leer bleiben. Prüfe die Anzeige separat, wenn weitere Ressourcenpakete das HUD oder die Actionbar nutzen.
+- **Tarnstatus.** Setze den Helm auf, warte einige Sekunden und setze ihn wieder ab. Nur der Träger soll das durchgestrichene Auge oben rechts sehen. Beim Auf- und Absetzen soll die Actionbar unten leer bleiben. Prüfe die Anzeige separat, wenn weitere Ressourcenpakete das HUD oder die Actionbar nutzen.
 - **Tarnung.** Aktiviere Spieler-Wegpunkte für alle. Prüfe zuerst, dass der Beobachter den Namen, den Punkt auf der Leiste und den Marker auf einer Ortungskarte sieht. Setze den Helm im Stehen auf. Der Beobachter prüft Name und Marker im direkten Nahbereich und hinter einer Wand. Nach dem Absetzen müssen sie wieder sichtbar sein. Tauscht die Rollen. Der Test gilt erst als bestanden, wenn auch direkt vor dem Träger kein Namensschild zu sehen ist.
 - **Spielablauf.** Stelle den Helm im Survival her. Rüste ihn über das Inventar und über Benutzen aus. Prüfe, dass Halten allein keine Tarnung auslöst, und tausche ihn gegen einen normalen Helm. Wiederhole die Sichtprüfung nach Dimensionswechsel, Wiederbeitritt und Tod. Nach einem Tod richtet sich die Tarnung danach, welcher Helm nach dem Respawn tatsächlich im Kopfslot liegt.
 

@@ -82,7 +82,8 @@ class PackagingTests(unittest.TestCase):
         self.assertIn("stealth-hud.js", entry)
         self.assertIn("stealthHud.update(player, system.currentTick, helmet?.typeId)", entry)
         self.assertIn("stealthHud.remove(playerId)", entry)
-        self.assertTrue((RP / "ui/hud_screen.json").is_file())
+        hud = data(RP / "ui/hud_screen.json")["secrets_expert_stealth_status"]
+        self.assertEqual(png_header(RP / f'{hud["texture"]}.png'), (19, 19, 8, 6))
 
     def test_localized_display_name_and_inventory_icon_are_registered(self):
         components = data(BP / "items/stealth_helmet.json")["minecraft:item"]["components"]

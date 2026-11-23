@@ -38,7 +38,7 @@ system.beforeEvents.startup.subscribe(({ blockComponentRegistry, itemComponentRe
     onTick({ block }) { stopPulse(block); },
   });
   blockComponentRegistry.registerCustomComponent(`${NAMESPACE}:torch_ambience`, {
-    onTick({ block }, { params }) { emitTorchParticles(block, params.flame); },
+    onTick({ block }, { params }) { emitTorchParticles(block, params.effect); },
   });
   itemComponentRegistry.registerCustomComponent(`${NAMESPACE}:read_switch_guide`, {
     onUse({ source }) { void showGuide(source); },

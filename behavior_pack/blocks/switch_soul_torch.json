@@ -76,7 +76,7 @@
         "looping": true
       },
       "secrets_expert:torch_ambience": {
-        "flame": "secrets_expert:soul_torch_flame"
+        "effect": "secrets_expert:soul_torch_ambience"
       }
     },
     "permutations": [

@@ -129,7 +129,13 @@ const geometry = Object.entries(meshes).map(([model, bones]) => ({
   bones,
 }));
 
-function putParticle(name, components) {
+const flameParticles = {
+  torch: 'basic_flame_particle',
+  soul_torch: 'blue_flame_particle',
+  copper_torch: 'green_flame_particle',
+};
+for (const [torch, flame] of Object.entries(flameParticles)) {
+  const name = `${torch}_ambience`;
   put(`resource_pack/particles/${name}.json`, {
     format_version: '1.10.0',
     particle_effect: {
@@ -138,43 +144,21 @@ function putParticle(name, components) {
         basic_render_parameters: { material: 'particles_alpha', texture: 'textures/particle/particles' },
       },
       components: {
-        'minecraft:emitter_rate_instant': { num_particles: 1 },
+        'minecraft:emitter_rate_manual': { max_particles: 1 },
         'minecraft:emitter_lifetime_once': { active_time: 0.05 },
-        ...components,
+        'minecraft:emitter_lifetime_events': { creation_event: 'emit_torch_particles' },
+      },
+      // The built-in effects need a manual emission event at the wick.
+      events: {
+        emit_torch_particles: {
+          sequence: [`minecraft:${flame}`, 'minecraft:basic_smoke_particle'].map((effect) => ({
+            particle_effect: { effect, type: 'particle' },
+          })),
+        },
       },
     },
   });
 }
-
-const flameSprites = { torch: [0, 24], soul_torch: [16, 24], copper_torch: [32, 56] };
-for (const [torch, uv] of Object.entries(flameSprites)) {
-  const size = 'math.max(0.01, 0.12 - 0.07 * variable.particle_age)';
-  putParticle(`${torch}_flame`, {
-    'minecraft:particle_lifetime_expression': { max_lifetime: 'math.random(1.0, 1.4)' },
-    'minecraft:particle_appearance_billboard': {
-      size: [size, size], facing_camera_mode: 'lookat_xyz',
-      uv: { texture_width: 128, texture_height: 128, uv, uv_size: [8, 8] },
-    },
-  });
-}
-
-putParticle('torch_smoke', {
-  'minecraft:emitter_shape_point': { direction: [0, 1, 0] },
-  'minecraft:particle_initial_speed': 0.5,
-  'minecraft:particle_lifetime_expression': { max_lifetime: 'math.random(0.4, 1.0)' },
-  'minecraft:particle_motion_dynamic': { linear_acceleration: [0, 0.3, 0] },
-  'minecraft:particle_appearance_billboard': {
-    size: [0.085, 0.085], facing_camera_mode: 'lookat_xyz',
-    uv: {
-      texture_width: 128, texture_height: 128,
-      flipbook: {
-        base_UV: [56, 0], size_UV: [8, 8], step_UV: [-8, 0],
-        frames_per_second: 8, max_frame: 8, stretch_to_lifetime: true,
-      },
-    },
-  },
-  'minecraft:particle_appearance_lighting': {},
-});
 
 function panePermutations() {
   return Array.from({ length: 16 }, (_, mask) => {
@@ -259,7 +243,7 @@ function definition(variant) {
   if (light) components['minecraft:light_emission'] = light;
   if (model === 'torch') {
     components['minecraft:tick'] = { interval_range: [20, 20], looping: true };
-    components[`${NAMESPACE}:torch_ambience`] = { flame: `${NAMESPACE}:${original}_flame` };
+    components[`${NAMESPACE}:torch_ambience`] = { effect: `${NAMESPACE}:${original}_ambience` };
   }
   if (pane) components['minecraft:connection_rule'] = { accepts_connections_from: 'all' };
 

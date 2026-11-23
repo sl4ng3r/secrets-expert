@@ -57,7 +57,7 @@ test('server signals contain only invisible characters and match the HUD predica
   assert.equal(icon.$secrets_expert_text, '$actionbar_text');
   assert.equal(icon.visible, `($secrets_expert_text = '${on}')`);
   assert.deepEqual([icon.anchor_from, icon.anchor_to], ['top_right', 'top_right']);
-  assert.equal(icon.texture, 'textures/items/stealth_helmet');
+  assert.equal(icon.texture, 'textures/ui/stealth_status');
   assert.ok(on.startsWith(off));
   const standard = resource.hud_actionbar_text;
   assert.equal(standard.$secrets_expert_text, '$actionbar_text');

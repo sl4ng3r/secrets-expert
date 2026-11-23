@@ -55,12 +55,13 @@ export function stopPulse(block) {
   if (permutation.getState(ACTIVITY_STATE)) block.setPermutation(permutation.withState(ACTIVITY_STATE, false));
 }
 
-export function emitTorchParticles(block, flame) {
+export function emitTorchParticles(block, effect, roll = Math.random()) {
+  // Emit on 40% of the one-second ticks to leave gaps between bursts.
+  if (roll >= 0.4) return;
   const support = FACES[block.permutation.getState(FACE_STATE)]?.offset;
   if (!support) return;
   const { x, y, z } = block.location;
   // The tilted wick is 13 pixels high and 3.5 pixels toward the wall from the center.
   const tip = { x: x + 0.5 + support.x * 3.5 / 16, y: y + 13 / 16, z: z + 0.5 + support.z * 3.5 / 16 };
-  block.dimension.spawnParticle(flame, tip);
-  block.dimension.spawnParticle(`${NAMESPACE}:torch_smoke`, tip);
+  block.dimension.spawnParticle(effect, tip);
 }
