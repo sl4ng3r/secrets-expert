@@ -28,7 +28,9 @@
       "minecraft:material_instances": {
         "*": {
           "texture": "secrets_expert_copper_torch",
-          "render_method": "opaque"
+          "render_method": "opaque",
+          "ambient_occlusion": 0,
+          "face_dimming": false
         }
       },
       "minecraft:placement_filter": {

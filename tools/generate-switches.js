@@ -49,13 +49,13 @@ function box(origin, size, uv) {
 // The three vanilla torch textures share the same two-pixel-wide shaft.
 // The rest of the sprite is transparent and should not cover the cube faces.
 const torchShaft = {
-  ...box([-1, 3, -6], [2, 10, 2], {
+  ...box([-1, 3, -6.25], [2, 10, 2], {
     ...faceMap(['north', 'south', 'east', 'west'], [7, 6], [2, 10]),
     up: faceUv([7, 6], [2, 2]),
     down: faceUv([7, 14], [2, 2]),
   }),
-  pivot: [0, 8, -5],
-  rotation: [-22.5, 0, 0],
+  pivot: [0, 8, -5.25],
+  rotation: [-20, 0, 0],
 };
 
 // Model the end rod horizontally inside the block. Bedrock rejects the old
@@ -202,6 +202,11 @@ function definition(variant) {
     texture: `${NAMESPACE}_${original}`,
     render_method: slab || model === 'skull' || model === 'rod' || model === 'torch' ? 'opaque' : 'alpha_test',
   };
+  if (model === 'torch') {
+    // Avoid the solid-block shading that darkens the thin shaft against a wall.
+    material.ambient_occlusion = 0;
+    material.face_dimming = false;
+  }
   const materials = { '*': material };
   const geometryComponent = { identifier: geometryId(model) };
   if (pane) {

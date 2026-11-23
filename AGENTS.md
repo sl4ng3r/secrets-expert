@@ -4,7 +4,7 @@ Minecraft-Bedrock-Add-on für Realms ab 26.40. Stabile Script APIs `@minecraft/s
 
 ## Aufbau
 
-- `behavior_pack/` enthält Item, Rezept und Skript. `minecraft:wearable` steuert die Ortung. `scripts/main.js` liest den Kopfslot, `scripts/stealth-helmet.js` gleicht die Namensschilddistanz ab.
+- `behavior_pack/` enthält Item, Rezept und Skript. `minecraft:wearable` steuert die Ortung. `scripts/main.js` liest den Kopfslot, `scripts/stealth-helmet.js` gleicht die Namensschilddistanz ab. `scripts/stealth-hud.js` sendet unsichtbare Actionbar-Signale für das Helm-Symbol in `resource_pack/ui/hud_screen.json`.
 - `behavior_pack/scripts/switch-catalog.js` ist die gemeinsame Quelle für Geheimschalter und Handbuch. Bei jedem neuen Schalter Katalog, Rezept, deutsche und englische Namen sowie den im Spiel sichtbaren Handbuchinhalt gemeinsam aktualisieren und testen. Rezepte, Blöcke und Schalterübersetzungen mit `node tools/generate-switches.js` nachführen.
 - `switch-logic.js` definiert die vier Wandrichtungen und verarbeitet Benutzungsklicks aus dem abbrechbaren Block-Interaktionsereignis. Bedrock speichert Platzierungsrichtung und Impulszustand im Schalterblock. Ein Block-Tick schaltet den Impuls ab.
 - Alle Add-on-Rezepte verwenden `AlwaysUnlocked`.

@@ -77,10 +77,12 @@ class PackagingTests(unittest.TestCase):
             recipe = data(path)["minecraft:recipe_shapeless"]
             self.assertEqual(recipe["unlock"], {"context": "AlwaysUnlocked"}, path.name)
 
-    def test_helmet_script_does_not_send_actionbar_text(self):
+    def test_helmet_hud_is_connected_to_the_head_slot_and_packaged(self):
         entry = (BP / "scripts/main.js").read_text(encoding="utf-8")
-        self.assertNotIn("setActionBar(", entry)
-        self.assertNotIn("stealth-hud.js", entry)
+        self.assertIn("stealth-hud.js", entry)
+        self.assertIn("stealthHud.update(player, system.currentTick, helmet?.typeId)", entry)
+        self.assertIn("stealthHud.remove(playerId)", entry)
+        self.assertTrue((RP / "ui/hud_screen.json").is_file())
 
     def test_localized_display_name_and_inventory_icon_are_registered(self):
         components = data(BP / "items/stealth_helmet.json")["minecraft:item"]["components"]
@@ -143,13 +145,16 @@ class PackagingTests(unittest.TestCase):
                 components = block["components"]
                 material = components["minecraft:material_instances"]["*"]
                 self.assertEqual(material["render_method"], "opaque")
+                self.assertIs(material["face_dimming"], False)
+                self.assertEqual(material["ambient_occlusion"], 0.0)
                 self.assertEqual(texture_data[material["texture"]]["textures"], f"textures/blocks/{original}")
                 self.assertEqual(components["minecraft:light_emission"], light)
                 model = components["minecraft:geometry"]["identifier"]
                 geometry = next(geometry for geometry in geometries if geometry["description"]["identifier"] == model)
                 shaft, = geometry["bones"][0]["cubes"]
                 self.assertEqual(shaft["size"], [2, 10, 2])
-                self.assertEqual(shaft["rotation"], [-22.5, 0, 0], "The tip must lean away from the wall")
+                self.assertEqual(shaft["rotation"], [-20, 0, 0], "The tip must lean slightly away from the wall")
+                self.assertEqual(shaft["pivot"][2], -5.25)
                 for face in ("north", "east", "south", "west"):
                     self.assertEqual(shaft["uv"][face], {"uv": [7, 6], "uv_size": [2, 10]})
 

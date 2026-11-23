@@ -120,7 +120,7 @@ test('torch effects start at the outward tip in all four wall orientations', () 
     const effects = [];
     block.location = { x: 4, y: 80, z: -5 };
     block.dimension = { spawnParticle: (id, location) => effects.push({ id, location }) };
-    const origin = { x: 4.5 + offset.x * 3 / 16, y: 80 + 13 / 16, z: -4.5 + offset.z * 3 / 16 };
+    const origin = { x: 4.5 + offset.x * 3.5 / 16, y: 80 + 13 / 16, z: -4.5 + offset.z * 3.5 / 16 };
     emitTorchParticles(block, 'secrets_expert:torch_flame');
     assert.deepEqual(effects, [
       { id: 'secrets_expert:torch_flame', location: origin },

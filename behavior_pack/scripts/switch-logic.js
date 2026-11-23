@@ -59,8 +59,8 @@ export function emitTorchParticles(block, flame) {
   const support = FACES[block.permutation.getState(FACE_STATE)]?.offset;
   if (!support) return;
   const { x, y, z } = block.location;
-  // The tilted wick is 13 pixels high and 3 pixels toward the wall from the center.
-  const tip = { x: x + 0.5 + support.x * 3 / 16, y: y + 13 / 16, z: z + 0.5 + support.z * 3 / 16 };
+  // The tilted wick is 13 pixels high and 3.5 pixels toward the wall from the center.
+  const tip = { x: x + 0.5 + support.x * 3.5 / 16, y: y + 13 / 16, z: z + 0.5 + support.z * 3.5 / 16 };
   block.dimension.spawnParticle(flame, tip);
   block.dimension.spawnParticle(`${NAMESPACE}:torch_smoke`, tip);
 }
